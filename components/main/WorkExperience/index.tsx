@@ -25,7 +25,7 @@ export const WorkExperience = () => (
       </Rig>
       <Banner position={[0, -0.15, 0]} />
     </ScrollControls>
-    <Environment preset="dawn" background blur={0.5} />
+    <Environment preset="dawn" background={false} blur={0.5} />
   </Canvas>
 );
 
@@ -34,7 +34,7 @@ function Rig(props: any) {
   const scroll = useScroll();
   useFrame((state, delta) => {
     ref.current.rotation.y = -scroll.offset * (Math.PI * 2); // Rotate contents
-    state.events.update(); // Raycasts every frame rather than on pointer-move
+    state.events.update?.(); // Raycasts every frame rather than on pointer-move
     easing.damp3(
       state.camera.position,
       [-state.pointer.x * 2, state.pointer.y + 1.5, 10],
@@ -46,13 +46,7 @@ function Rig(props: any) {
   return <group ref={ref} {...props} />;
 }
 
-const arrImg = [
-  "/NextWebsite.png",
-  "/ReactNative .png",
-  "/react.png",
-  "/reactquery.png",
-  "/redux.png",
-];
+const arrImg = ["/algolabs.jpg", "/mindx.png", "/tanca.jpg"];
 function Carousel({ radius = 1.4, count = arrImg.length }) {
   return Array.from({ length: count }, (_, i) => (
     <Card
