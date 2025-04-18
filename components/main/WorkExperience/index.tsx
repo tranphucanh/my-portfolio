@@ -46,19 +46,39 @@ function Rig(props: any) {
   return <group ref={ref} {...props} />;
 }
 
-const arrImg = ["/algolabs.jpg", "/mindx.png", "/tanca.jpg"];
+const arrImg = [
+  {
+    url: "/algolabs.jpg",
+    company: "AlgoLabs",
+    time: "2022 - 2023",
+  },
+  {
+    url: "/mindx.png",
+    company: "MindX",
+    time: "2022 - 2023",
+  },
+  {
+    url: "/tanca.jpg",
+    company: "Tanca.io",
+    time: "2022 - 2023",
+  },
+];
 function Carousel({ radius = 1.4, count = arrImg.length }) {
   return Array.from({ length: count }, (_, i) => (
-    <Card
-      key={arrImg[i]}
-      url={`${arrImg[i]}`}
-      position={[
-        Math.sin((i / count) * Math.PI * 2) * radius,
-        0,
-        Math.cos((i / count) * Math.PI * 2) * radius,
-      ]}
-      rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
-    />
+    <>
+      <Card
+        key={arrImg[i].url}
+        url={`${arrImg[i].url}`}
+        position={[
+          Math.sin((i / count) * Math.PI * 2) * radius,
+          0,
+          Math.cos((i / count) * Math.PI * 2) * radius,
+        ]}
+        rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
+        onClick={() => window.open(arrImg[i].url, "_blank")}
+      />
+      {/* <span>{arrImg[i].company}</span> */}
+    </>
   ));
 }
 
@@ -96,7 +116,7 @@ function Card({ url, ...props }: any) {
 
 function Banner(props: any) {
   const ref = useRef<any>();
-  const texture = useTexture("/NextWebsite.png");
+  const texture = useTexture("/LockMain.png");
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   const scroll = useScroll();
   useFrame((state, delta) => {
