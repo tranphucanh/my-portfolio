@@ -23,4 +23,18 @@ canvas {
   width: 50vw !important;
   height: 65vh !important;
   z-index: 100;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.work-experience::-webkit-scrollbar {
+  display: none;
+}
+
+.work-experience *::-webkit-scrollbar {
+  display: none !important;
+}
+.work-experience * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
