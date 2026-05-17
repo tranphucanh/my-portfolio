@@ -20,11 +20,17 @@ canvas {
 }
 
 .work-experience {
-  width: 50vw !important;
-  height: 65vh !important;
+  width: 100% !important;
+  height: 50vh !important;
   z-index: 100;
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@media (min-width: 1024px) {
+  .work-experience {
+    height: 70vh !important;
+  }
 }
 
 .work-experience::-webkit-scrollbar {
@@ -37,4 +43,29 @@ canvas {
 .work-experience * {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+}
+
+/* Custom Scrollbar for Modal */
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(112, 66, 248, 0.05);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #7042f88b, #00c2ff8b);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #7042f8, #00c2ff);
+    background-clip: content-box;
+  }
+  
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #7042f88b transparent;
 }
