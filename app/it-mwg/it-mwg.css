@@ -1,0 +1,251 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap");
+
+/* ============ BASE ============ */
+.tm-page {
+  --ink: #3b2a55;
+  --muted: #6e5d8a;
+  --pink: #ec4899;
+  --violet: #8b5cf6;
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-family: "Be Vietnam Pro", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, #f5ecff 0%, #fde7f3 45%, #e8f1ff 100%);
+}
+
+.tm-blob {
+  position: fixed;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  pointer-events: none;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.tm-blob.a {
+  top: -160px;
+  left: -140px;
+  background: #f9a8d4;
+}
+
+.tm-blob.b {
+  right: -160px;
+  bottom: -180px;
+  background: #c4b5fd;
+  animation-delay: -6s;
+}
+
+@keyframes drift {
+  to {
+    transform: translate(60px, 40px) scale(1.1);
+  }
+}
+
+.tm-content {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 5vh, 56px) 16px 64px;
+}
+
+/* ============ HEADER ============ */
+.tm-header {
+  text-align: center;
+}
+
+.tm-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--violet);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.tm-date {
+  margin-top: 6px;
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(64px, 13vw, 120px);
+  line-height: 1;
+  background: linear-gradient(110deg, var(--pink), var(--violet) 60%, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 6px 18px rgba(236, 72, 153, 0.25));
+}
+
+.tm-header h1 {
+  margin-top: 4px;
+  font-size: clamp(20px, 3.6vw, 30px);
+  font-weight: 800;
+}
+
+.tm-header p {
+  margin-top: 8px;
+  font-size: clamp(15px, 2.2vw, 17px);
+  color: var(--muted);
+}
+
+/* ============ 3D STAGE ============ */
+.tm-stage {
+  width: 100%;
+  height: clamp(380px, 58vh, 520px);
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .tm-stage {
+    height: 360px;
+  }
+}
+
+.tm-loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--muted);
+}
+
+.tm-hint {
+  margin-top: -4px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--violet);
+}
+
+.tm-tag {
+  position: relative;
+  width: max-content;
+  max-width: 190px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  text-align: center;
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #be185d;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.25);
+  animation: tagPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+}
+
+.tm-tag::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  translate: -50% 0;
+  border: 8px solid transparent;
+  border-bottom: 0;
+  border-top-color: #fff;
+}
+
+@keyframes tagPop {
+  from {
+    transform: scale(0) translateY(10px);
+  }
+}
+
+/* ============ LETTER ============ */
+.tm-letter {
+  position: relative;
+  margin: 36px auto 0;
+  max-width: 760px;
+  padding: clamp(28px, 5vw, 44px) clamp(20px, 5vw, 48px);
+  border-radius: 24px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 60px rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.tm-letter-flower {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  translate: -50% 0;
+  font-size: 48px;
+  animation: sway 3.5s ease-in-out infinite;
+}
+
+@keyframes sway {
+  50% {
+    transform: rotate(-8deg) translateY(-4px);
+  }
+}
+
+.tm-letter h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(30px, 5vw, 40px);
+  color: var(--pink);
+}
+
+.tm-letter p {
+  margin-top: 12px;
+  font-size: clamp(15px, 2.3vw, 17px);
+  line-height: 1.85;
+}
+
+/* ============ CARDS ============ */
+.tm-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.tm-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.1);
+}
+
+.tm-card-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  font-size: 26px;
+  background: linear-gradient(135deg, #fde7f3, #ede9fe);
+}
+
+.tm-card h3 {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.tm-card p {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.tm-sign {
+  margin-top: 36px;
+  text-align: center;
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(28px, 5vw, 36px);
+  color: var(--violet);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-blob,
+  .tm-letter-flower {
+    animation: none;
+  }
+}

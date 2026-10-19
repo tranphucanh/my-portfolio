@@ -39,7 +39,7 @@ export type ChibiColors = typeof DEFAULT_COLORS;
 
 export type ChibiLook = {
   outfit?: "hoodie" | "suit" | "aodai";
-  hair?: "short" | "neat" | "bun";
+  hair?: "short" | "neat" | "bun" | "long";
   colors?: Partial<ChibiColors>;
 };
 
@@ -365,9 +365,9 @@ export default function ChibiBody({ rig, look = {} }: { rig: ChibiRig; look?: Ch
             </>
           )}
 
-          {hair === "bun" && (
+          {(hair === "bun" || hair === "long") && (
             <>
-              {/* mái rẽ ngôi giữa + tóc dài hai bên + búi tóc cài hoa */}
+              {/* mái rẽ ngôi giữa + tóc dài hai bên (+ búi tóc) + hoa cài */}
               {[-1, 1].map((sx) => (
                 <React.Fragment key={`bun${sx}`}>
                   <Outlined
@@ -391,8 +391,13 @@ export default function ChibiBody({ rig, look = {} }: { rig: ChibiRig; look?: Ch
                 </React.Fragment>
               ))}
               <Outlined geometry={g.sphere} material={m.hair} outline={m.outline} position={[0, -0.04, -0.17]} scale={[0.43, 0.42, 0.32]} width={0.04} />
-              <Outlined geometry={g.sphere} material={m.hair} outline={m.outline} position={[0, 0.3, -0.36]} scale={0.17} width={0.12} />
-              <group position={[0.15, 0.36, -0.27]} rotation={[0, 0.6, 0]}>
+              {hair === "bun" ? (
+                <Outlined geometry={g.sphere} material={m.hair} outline={m.outline} position={[0, 0.3, -0.36]} scale={0.17} width={0.12} />
+              ) : (
+                /* tóc dài xõa phía sau */
+                <Outlined geometry={g.sphere} material={m.hair} outline={m.outline} position={[0, -0.28, -0.2]} scale={[0.4, 0.42, 0.24]} width={0.05} />
+              )}
+              <group position={hair === "bun" ? [0.15, 0.36, -0.27] : [0.3, 0.3, 0.12]} rotation={[0, 0.6, 0]}>
                 {[0, 1, 2, 3, 4].map((k) => (
                   <mesh
                     key={k}
