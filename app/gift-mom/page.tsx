@@ -96,12 +96,18 @@ function useTypewriter(text: string, speed = 28, delay = 0) {
 
 export default function GiftMomPage() {
   const [mounted, setMounted] = useState(false);
-  const [stage, setStage] = useState<"envelope" | "opening" | "letter">("envelope");
+  const [stage, setStage] = useState<"envelope" | "opening" | "letter">(
+    "envelope",
+  );
 
   useEffect(() => setMounted(true), []);
 
   // chữ bắt đầu gõ sau khi con trao hoa xong
-  const { shown, done } = useTypewriter(stage === "letter" ? MOM_WISH : "", 26, 4500);
+  const { shown, done } = useTypewriter(
+    stage === "letter" ? MOM_WISH : "",
+    26,
+    4500,
+  );
 
   const openEnvelope = () => {
     if (stage !== "envelope") return;
@@ -116,7 +122,13 @@ export default function GiftMomPage() {
           BOKEH.map((b) => (
             <span
               key={b.id}
-              style={{ left: b.left, top: b.top, width: b.size, height: b.size, animationDelay: `${b.delay}s` }}
+              style={{
+                left: b.left,
+                top: b.top,
+                width: b.size,
+                height: b.size,
+                animationDelay: `${b.delay}s`,
+              }}
             />
           ))}
       </div>
@@ -158,7 +170,12 @@ export default function GiftMomPage() {
             <motion.section
               key="envelope"
               className="mom-envelope-wrap"
-              exit={{ opacity: 0, scale: 0.85, y: 30, transition: { duration: 0.4 } }}
+              exit={{
+                opacity: 0,
+                scale: 0.85,
+                y: 30,
+                transition: { duration: 0.4 },
+              }}
             >
               <Envelope open={stage === "opening"} onOpen={openEnvelope} />
               {stage === "opening" &&
@@ -167,8 +184,18 @@ export default function GiftMomPage() {
                     key={b.id}
                     className="mom-burst"
                     initial={{ x: 0, y: 0, opacity: 0, scale: 0.4, rotate: 0 }}
-                    animate={{ x: b.x, y: b.y, opacity: [0, 1, 1, 0], scale: 1.2, rotate: b.r }}
-                    transition={{ duration: 1.6, delay: 0.5 + b.delay, ease: "easeOut" }}
+                    animate={{
+                      x: b.x,
+                      y: b.y,
+                      opacity: [0, 1, 1, 0],
+                      scale: 1.2,
+                      rotate: b.r,
+                    }}
+                    transition={{
+                      duration: 1.6,
+                      delay: 0.5 + b.delay,
+                      ease: "easeOut",
+                    }}
                   >
                     {b.emoji}
                   </motion.span>
@@ -176,7 +203,10 @@ export default function GiftMomPage() {
               <motion.p
                 className="mom-hint"
                 animate={{ opacity: stage === "envelope" ? [0.6, 1, 0.6] : 0 }}
-                transition={{ repeat: stage === "envelope" ? Infinity : 0, duration: 2 }}
+                transition={{
+                  repeat: stage === "envelope" ? Infinity : 0,
+                  duration: 2,
+                }}
               >
                 Chạm vào phong thư để mở nhé ✉️
               </motion.p>
@@ -192,7 +222,6 @@ export default function GiftMomPage() {
               <div className="mom-stage">
                 <MomScene />
               </div>
-              <p className="stage-hint">Chạm vào cảnh để xem lại 💐</p>
 
               <div className="letter-paper">
                 <p className="letter-greet">Mẹ yêu dấu,</p>
@@ -200,7 +229,10 @@ export default function GiftMomPage() {
                   {shown}
                   {!done && <span className="caret" />}
                 </p>
-                <motion.p className="letter-sign" animate={{ opacity: done ? 1 : 0, y: done ? 0 : 6 }}>
+                <motion.p
+                  className="letter-sign"
+                  animate={{ opacity: done ? 1 : 0, y: done ? 0 : 6 }}
+                >
                   — {SIGNATURE} 💗
                 </motion.p>
               </div>
