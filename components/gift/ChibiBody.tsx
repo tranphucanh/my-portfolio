@@ -6,15 +6,15 @@ import type { ThreeElements } from "@react-three/fiber";
 
 /* Các khớp để Courier điều khiển animation */
 export type ChibiRig = {
-  torso: React.RefObject<THREE.Group>;
-  head: React.RefObject<THREE.Group>;
-  legL: React.RefObject<THREE.Group>;
-  legR: React.RefObject<THREE.Group>;
-  armL: React.RefObject<THREE.Group>;
-  armR: React.RefObject<THREE.Group>;
-  hand: React.RefObject<THREE.Group>;
-  eyesOpen: React.RefObject<THREE.Group>;
-  eyesHappy: React.RefObject<THREE.Group>;
+  torso: React.RefObject<THREE.Group | null>;
+  head: React.RefObject<THREE.Group | null>;
+  legL: React.RefObject<THREE.Group | null>;
+  legR: React.RefObject<THREE.Group | null>;
+  armL: React.RefObject<THREE.Group | null>;
+  armR: React.RefObject<THREE.Group | null>;
+  hand: React.RefObject<THREE.Group | null>;
+  eyesOpen: React.RefObject<THREE.Group | null>;
+  eyesHappy: React.RefObject<THREE.Group | null>;
 };
 
 const DEFAULT_COLORS = {

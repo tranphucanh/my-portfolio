@@ -69,3 +69,8 @@ canvas {
   scrollbar-width: thin;
   scrollbar-color: #7042f88b transparent;
 }
+
+/* Cho phép cuộn dọc trên mobile, chỉ vuốt ngang mới xoay carousel */
+.work-experience canvas {
+  touch-action: pan-y;
+}

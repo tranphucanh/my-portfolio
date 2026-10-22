@@ -1,10 +1,12 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import * as THREE from "three";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Image, useTexture, Stars, Float } from "@react-three/drei";
+import { Canvas, useFrame, useThree, ThreeElements } from "@react-three/fiber";
+import { Image, useTexture, Stars, Float, Sparkles } from "@react-three/drei";
 import { easing } from "maath";
+import { Skill_data } from "@/constants";
 import "./util";
 import "./styles.scss";
 import { motion, AnimatePresence } from "framer-motion";
@@ -225,72 +227,65 @@ const arrImg = [
           Job Description
         </h3>
         <p>
-          Participated in the development of Tanca&apos;s HR management system,
-          including both mobile app (React Native) and website (ReactJS).
-          Researched and integrated new technologies to optimize the system.
+          Software Engineer (Frontend) at Mobile World Group (MWG), one of
+          Vietnam&apos;s largest retail groups. Building and maintaining web
+          products across its retail chains, from customer-facing e-commerce
+          sites to seller portals and internal operation systems.
         </p>
 
         <h3 style={{ margin: "16px 0 8px", color: "#ffd700" }}>
-          Technologies Used
-        </h3>
-        <ul style={{ columns: 2, marginBottom: 8 }}>
-          <li>ReactJS</li>
-          <li>React Native</li>
-          <li>Redux</li>
-          <li>TypeScript</li>
-          <li>Ant Design</li>
-          <li>Socket.IO</li>
-          <li>SASS</li>
-          <li>Bootstrap</li>
-          <li>Git</li>
-        </ul>
-
-        <h3 style={{ margin: "16px 0 8px", color: "#ffd700" }}>
-          Key Responsibilities
+          E-commerce Websites
         </h3>
         <ul style={{ marginBottom: 8 }}>
-          <li>Developed and enhanced web and mobile app UI/UX.</li>
-          <li>Created new features and maintained legacy features.</li>
-          <li>Researched new libraries and optimized system performance.</li>
           <li>
-            Participated in brainstorming sessions and provided ideas to improve
-            the product.
+            <strong>bachhoaxanh.com:</strong> Bách Hoá Xanh grocery chain.
           </li>
           <li>
-            Supported team leader in mentoring new members and ensuring code
-            quality.
+            <strong>nhathuocankhang.com:</strong> An Khang pharmacy chain.
+          </li>
+          <li>
+            <strong>avakid.com:</strong> AVAKids mother &amp; baby store.
+          </li>
+          <li>
+            <strong>mwg.vn:</strong> MWG corporate website.
           </li>
         </ul>
 
         <h3 style={{ margin: "16px 0 8px", color: "#ffd700" }}>
-          Notable Features
+          Seller Center
+        </h3>
+        <ul style={{ marginBottom: 8 }}>
+          <li>
+            <strong>sc.bachhoaxanh.com</strong> and{" "}
+            <strong>sc.dienmayxanh.com:</strong> seller portals for Bách Hoá
+            Xanh and Điện Máy Xanh.
+          </li>
+          <li>
+            <strong>MWG Seller Center:</strong> seller portal for the group.
+          </li>
+        </ul>
+
+        <h3 style={{ margin: "16px 0 8px", color: "#ffd700" }}>
+          Internal Systems
+        </h3>
+        <ul style={{ marginBottom: 8 }}>
+          <li>
+            <strong>CMS Bách Hoá Xanh:</strong> declaring and managing store
+            data and content.
+          </li>
+          <li>
+            <strong>OMS Bách Hoá Xanh:</strong> order management and customer
+            information management.
+          </li>
+        </ul>
+
+        <h3 style={{ margin: "16px 0 8px", color: "#ffd700" }}>
+          Community
         </h3>
         <ul>
           <li>
-            <strong>Request Layout:</strong> Managed employee requests with
-            approval/rejection functionality.
-          </li>
-          <li>
-            <strong>Export/Import Excel:</strong> Created and updated employee
-            information from Excel files.
-          </li>
-          <li>
-            <strong>Organization Diagram:</strong> Used the ReactFlow library to
-            visualize organizational charts.
-          </li>
-          <li>
-            <strong>Digital Signature:</strong> Integrated with third-party
-            services (Viettel, VNPT) for applying digital signatures on
-            contracts and documents.
-          </li>
-          <li>
-            <strong>Hiring:</strong> Managed a list of applicants and filtered
-            CVs from recruitment websites.
-          </li>
-          <li>
-            <strong>Task Timesheet:</strong> Created a feature to divide tasks
-            based on work shifts and time frames, making it easier to manage
-            daily tasks.
+            <strong>bachhoaxanh.com/kinh-nghiem-hay:</strong> Bách Hoá
+            Xanh&apos;s social network for sharing tips and experiences.
           </li>
         </ul>
       </section>
@@ -298,19 +293,61 @@ const arrImg = [
   },
 ];
 
+const STEP = (Math.PI * 2) / arrImg.length;
+// Kéo quá ngưỡng này (px) thì coi là drag, không mở modal
+const DRAG_THRESHOLD = 6;
+
+type RigState = {
+  target: number;
+  dragging: boolean;
+  moved: number;
+  lastX: number;
+  velocity: number;
+};
+
+const mod = (n: number, m: number) => ((n % m) + m) % m;
+const frontIndex = (rotation: number) =>
+  mod(Math.round(-rotation / STEP), arrImg.length);
+
 export const WorkExperience = () => {
   const [selected, setSelected] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const rig = useRef<RigState>({
+    target: 0,
+    dragging: false,
+    moved: 0,
+    lastX: 0,
+    velocity: 0,
+  });
 
-  const handleCardClick = (index: number) => {
+  const rotateTo = (index: number) => {
+    // Chọn góc gần nhất để card quay ra phía trước theo đường ngắn nhất
+    const desired = -index * STEP;
+    const current = rig.current.target;
+    rig.current.target =
+      current + mod(desired - current + Math.PI, Math.PI * 2) - Math.PI;
     setSelected(index);
+  };
+
+  const openCard = (index: number) => {
+    rotateTo(index);
     setIsOpen(true);
   };
+
+  const handleCardClick = (index: number) => {
+    if (rig.current.moved > DRAG_THRESHOLD) return;
+    // Card chưa ở phía trước thì chỉ xoay tới, click lần nữa mới mở chi tiết
+    if (index !== frontIndex(rig.current.target)) return rotateTo(index);
+    openCard(index);
+  };
+
+  const step = (dir: 1 | -1) =>
+    rotateTo(mod(frontIndex(rig.current.target) + dir, arrImg.length));
 
   return (
     <div
       id="work-experiences"
-      className="relative w-full flex flex-col items-center justify-center py-20 overflow-hidden"
+      className="relative w-full flex flex-col items-center justify-center py-10 overflow-hidden"
     >
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
@@ -348,20 +385,58 @@ export const WorkExperience = () => {
         </div>
       </motion.div>
 
-      <div className="w-full h-[400px] lg:h-[700px] flex items-center justify-center cursor-grab active:cursor-grabbing">
+      <div className="relative w-full h-[400px] lg:h-[700px] flex items-center justify-center cursor-grab active:cursor-grabbing">
         <Canvas
           className="work-experience scrollbar-hidden"
           camera={{ position: [0, 0, 100], fov: 15 }}
+          dpr={[1, 2]}
         >
           <fog attach="fog" args={["#030014", 8.5, 12]} />
-          <Rig rotation={[0, 0, 0.15]}>
+          <Rig rig={rig} onSnap={setSelected} rotation={[0, 0, 0.15]}>
             <Carousel setSelected={handleCardClick} selected={selected} />
           </Rig>
           <HoloRing position={[0, -0.15, 0]} />
+          <Sparkles
+            count={80}
+            scale={[4.5, 2, 4.5]}
+            size={2.5}
+            speed={0.3}
+            opacity={0.6}
+            color="#b49bff"
+          />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <pointLight position={[-10, -10, -10]} intensity={0.5} />
         </Canvas>
+
+        {/* z-[100] bằng canvas nhưng đứng sau trong DOM nên nằm trên canvas, dưới modal */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4">
+          <button
+            type="button"
+            aria-label="Previous experience"
+            onClick={() => step(-1)}
+            className="button-primary rounded-full border border-[#7042f88b] w-10 h-10 flex items-center justify-center text-xl text-white backdrop-blur-md"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => openCard(selected)}
+            className="button-primary rounded-full border border-[#7042f88b] px-5 h-10 flex items-center text-sm whitespace-nowrap backdrop-blur-md"
+          >
+            <span className="Welcome-text">
+              {arrImg[selected].company} · {arrImg[selected].time}
+            </span>
+          </button>
+          <button
+            type="button"
+            aria-label="Next experience"
+            onClick={() => step(1)}
+            className="button-primary rounded-full border border-[#7042f88b] w-10 h-10 flex items-center justify-center text-xl text-white backdrop-blur-md"
+          >
+            ›
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -373,43 +448,65 @@ export const WorkExperience = () => {
   );
 };
 
-function Rig(props: any) {
-  const ref = useRef<any>();
-  const [rotation, setRotation] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [lastX, setLastX] = useState(0);
+function Rig({
+  rig,
+  onSnap,
+  ...props
+}: {
+  rig: React.RefObject<RigState>;
+  onSnap: (index: number) => void;
+} & ThreeElements["group"]) {
+  const ref = useRef<THREE.Group>(null);
+  const el = useThree((state) => state.gl.domElement);
 
   useEffect(() => {
+    const r = rig.current;
     const handlePointerDown = (e: PointerEvent) => {
-      setIsDragging(true);
-      setLastX(e.clientX);
+      r.dragging = true;
+      r.moved = 0;
+      r.velocity = 0;
+      r.lastX = e.clientX;
     };
     const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
-      const deltaX = e.clientX - lastX;
-      setRotation((prev) => prev + deltaX * 0.005);
-      setLastX(e.clientX);
+      if (!r.dragging) return;
+      const deltaX = e.clientX - r.lastX;
+      r.moved += Math.abs(deltaX);
+      r.velocity = deltaX * 0.005;
+      r.target += r.velocity;
+      r.lastX = e.clientX;
     };
     const handlePointerUp = () => {
-      setIsDragging(false);
+      if (!r.dragging) return;
+      r.dragging = false;
+      // Quán tính rồi snap về card gần nhất
+      const projected = r.target + r.velocity * 8;
+      r.target = Math.round(projected / STEP) * STEP;
+      onSnap(frontIndex(r.target));
     };
 
-    window.addEventListener("pointerdown", handlePointerDown);
+    // Chỉ bắt đầu kéo trên canvas, nhưng theo dõi move/up trên window để kéo ra ngoài vẫn mượt
+    el.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointermove", handlePointerMove);
     window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
     return () => {
-      window.removeEventListener("pointerdown", handlePointerDown);
+      el.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
     };
-  }, [isDragging, lastX]);
+  }, [el, rig, onSnap]);
 
   useFrame((state, delta) => {
-    easing.damp(ref.current.rotation, "y", rotation, 0.3, delta);
+    if (!ref.current) return;
+    const isMobile = state.size.width < 768;
+    const targetZ = isMobile ? 16 : 10;
+
+    easing.damp(ref.current.rotation, "y", rig.current.target, 0.3, delta);
     state.events.update?.();
     easing.damp3(
       state.camera.position,
-      [-state.pointer.x * 2, state.pointer.y * 2 + 1.5, 10],
+      [-state.pointer.x * 2, state.pointer.y * 2 + 1.5, targetZ],
       0.3,
       delta,
     );
@@ -446,15 +543,30 @@ function Carousel({
 }
 
 function Card({ url, onClick, isSelected, ...props }: any) {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   const [hovered, hover] = useState(false);
+  const el = useThree((state) => state.gl.domElement);
   const pointerOver = (e: any) => (e.stopPropagation(), hover(true));
   const pointerOut = () => hover(false);
+
+  useEffect(() => {
+    el.style.cursor = hovered ? "pointer" : "";
+  }, [el, hovered]);
+
   useFrame((state, delta) => {
+    if (!ref.current) return;
     easing.damp3(
       ref.current.scale,
       hovered || isSelected ? 1.15 : 1,
       0.1,
+      delta,
+    );
+    // Card không được chọn sẽ hơi xám để tạo chiều sâu
+    easing.damp(
+      ref.current.material,
+      "grayscale",
+      hovered || isSelected ? 0 : 0.7,
+      0.25,
       delta,
     );
     easing.damp(
@@ -481,7 +593,8 @@ function Card({ url, onClick, isSelected, ...props }: any) {
       side={THREE.DoubleSide}
       onPointerOver={pointerOver}
       onPointerOut={pointerOut}
-      onClick={onClick}
+      // Chặn click lan sang card phía sau mà tia raycast cũng xuyên qua
+      onClick={(e: any) => (e.stopPropagation(), onClick())}
       {...props}
     >
       <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
@@ -490,7 +603,7 @@ function Card({ url, onClick, isSelected, ...props }: any) {
 }
 
 function Banner(props: any) {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   const texture = useTexture("/LockMain.png");
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   useFrame((state, delta) => {
@@ -515,21 +628,23 @@ function Banner(props: any) {
 }
 function HoloRing(props: any) {
   const ref = useRef<THREE.Mesh>(null);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
   useFrame((state, delta) => {
     if (ref.current) {
       ref.current.rotation.y += delta * 0.2;
     }
   });
   return (
-    <mesh ref={ref} {...props}>
+    <mesh ref={ref} scale={isMobile ? [1.5, 1.5, 1.5] : [1, 1, 1]} {...props}>
       <cylinderGeometry args={[1.6, 1.6, 0.14, 64, 1, true]} />
       <meshStandardMaterial
         color="#00c2ff"
         emissive="#7042f8"
-        emissiveIntensity={2}
+        emissiveIntensity={isMobile ? 4 : 2}
         wireframe={true}
         transparent={true}
-        opacity={0.5}
+        opacity={isMobile ? 0.8 : 0.5}
         side={THREE.DoubleSide}
       />
     </mesh>
@@ -539,7 +654,7 @@ function HoloRing(props: any) {
 function ModalBackground3D() {
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+      <Canvas camera={{ position: [0, 0, 5], fov: 75 }} dpr={[1, 1.5]}>
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#7042f8" />
         <pointLight
@@ -559,48 +674,62 @@ function ModalBackground3D() {
           speed={2}
         />
 
-        <Float speed={4} rotationIntensity={1} floatIntensity={2}>
-          <group>
-            <mesh position={[3, 2, -2]}>
-              <icosahedronGeometry args={[0.5, 0]} />
-              <meshStandardMaterial
-                color="#7042f8"
-                wireframe
-                transparent
-                opacity={0.4}
-              />
-            </mesh>
-            <mesh position={[-3, -2, -3]}>
-              <dodecahedronGeometry args={[0.4, 0]} />
-              <meshStandardMaterial
-                color="#00c2ff"
-                wireframe
-                transparent
-                opacity={0.3}
-              />
-            </mesh>
-            <mesh position={[2, -3, -1]}>
-              <torusKnotGeometry args={[0.3, 0.1, 64, 8]} />
-              <meshStandardMaterial
-                color="#b49bff"
-                wireframe
-                transparent
-                opacity={0.3}
-              />
-            </mesh>
-            <mesh position={[-4, 1, -2]}>
-              <tetrahedronGeometry args={[0.6, 0]} />
-              <meshStandardMaterial
-                color="#8042f8"
-                wireframe
-                transparent
-                opacity={0.2}
-              />
-            </mesh>
-          </group>
-        </Float>
+        <Sparkles
+          count={400}
+          scale={20}
+          size={2}
+          speed={0.8}
+          opacity={0.6}
+          color="#00c2ff"
+        />
+        <Sparkles
+          count={300}
+          scale={20}
+          size={3}
+          speed={0.6}
+          opacity={0.4}
+          color="#7042f8"
+        />
+        <AnimatedGeometries />
       </Canvas>
     </div>
+  );
+}
+
+function AnimatedGeometries() {
+  const groupRef = useRef<THREE.Group>(null);
+  // Random 1 lần, tránh icon đổi kích thước mỗi lần re-render
+  const scales = useMemo(() => Skill_data.map(() => 1.2 + Math.random()), []);
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.x += delta * 0.05;
+      groupRef.current.rotation.y += delta * 0.08;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {Skill_data.map((skill, i) => (
+        <Float
+          key={skill.skill_name}
+          speed={2 + (i % 3)}
+          rotationIntensity={2}
+          floatIntensity={3}
+        >
+          <Image
+            url={skill.Image}
+            transparent
+            position={[
+              Math.sin(i) * 8,
+              Math.cos(i * 1.5) * 6,
+              Math.sin(i * 2) * 5 - 3,
+            ]}
+            scale={scales[i]}
+            side={THREE.DoubleSide}
+          />
+        </Float>
+      ))}
+    </group>
   );
 }
 
@@ -626,10 +755,13 @@ function JobModal({
 }) {
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [onClose]);
 
   if (!job) return null;
   return (

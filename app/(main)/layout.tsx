@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import StarsCanvas from "@/components/main/StarBackground";
+import AstronautCanvas from "@/components/main/Astronaut";
 import Navbar from "@/components/main/Navbar";
 import Footer from "@/components/main/Footer";
-import QRCode from "@/components/qrcode/QRCode";
-// import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Phuc Anh | Portfolio",
+  title: "Phuc Anh | Software Engineer",
+  description:
+    "Phuc Anh – Software Engineer building web and mobile products with React, Next.js, TypeScript and React Native.",
 };
 
 export default function RootLayout({
@@ -18,10 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const pathname = usePathname();
-  // if (pathname === "/happy-birthday") {
-  //   return <div>{children}</div>;
-  // }
   return (
     <html lang="en">
       <head>
@@ -32,13 +29,13 @@ export default function RootLayout({
       </head>
 
       <body
-      // className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}
+        className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}
       >
-        <QRCode />
-        {/* <StarsCanvas />
+        <StarsCanvas />
+        <AstronautCanvas />
         <Navbar />
         {children}
-        <Footer /> */}
+        <Footer />
       </body>
     </html>
   );

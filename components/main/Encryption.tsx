@@ -41,12 +41,13 @@ const Encryption = () => {
         </div>
  
         <div className="Welcome-box px-[15px] py-[4px] z-[20] brder my-[20px] border-[#7042f88b] opacity-[0.9]">
-          <h1 className="Welcome-text text-[12px]">Encryption</h1>
+          <h1 className="Welcome-text text-[12px]">Built to scale</h1>
         </div>
       </div>
       <div className="absolute z-[20] bottom-[10px] px-[5px] w-full text-center">
         <div className="cursive text-sm lg:text-[20px] font-medium text-gray-300">
-          Secure your data with end-to-end encryption
+          30% faster page loads, smooth grids with 10,000+ records, and digital
+          signatures for HR contracts
         </div>
       </div>
  

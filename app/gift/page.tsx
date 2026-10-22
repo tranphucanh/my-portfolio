@@ -220,7 +220,7 @@ export default function GiftPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [restored, setRestored] = useState(false);
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   /* Khôi phục hộp đã mở từ lần trước */
   useEffect(() => {

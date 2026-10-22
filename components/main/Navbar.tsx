@@ -1,6 +1,9 @@
+"use client";
 import { Socials } from "@/constants";
 import Image from "next/image";
 import React from "react";
+import AnimatedLink from "../sub/AnimatedLink";
+
 
 const Navbar = () => {
   return (
@@ -15,7 +18,7 @@ const Navbar = () => {
             alt="logo"
             width={70}
             height={70}
-            className="cursor-pointer hover:animate-slowspin"
+            className="cursor-pointer hover:animate-slowspin w-[40px] h-[40px] sm:w-[70px] sm:h-[70px]"
           />
 
           <span className="font-bold ml-[10px] hidden lg:block text-gray-300">
@@ -23,32 +26,27 @@ const Navbar = () => {
           </span>
         </a>
 
-        <div className="w-[300px] lg:w-[500px] h-full flex flex-row items-center justify-between md:mr-20">
-          <div className="flex items-center justify-between w-full h-auto border border-[#7042f861] bg-[#0300145e] px-[10px] lg:px-[30px] py-[10px] rounded-full text-gray-200 text-xs lg:text-base">
-            <a href="#about-me" className="cursor-pointer">
-              About
-            </a>
-            <a href="#skills" className="cursor-pointer">
-              Skills
-            </a>
-            <a href="#work-experiences" className="cursor-pointer">
-              Work Experience
-            </a>
-            <a href="#projects" className="cursor-pointer">
-              Projects
-            </a>
+        <div className="w-[200px] sm:w-[300px] lg:w-[500px] h-full flex flex-row items-center justify-between md:mr-20">
+          <div className="flex items-center justify-between w-full h-auto border border-[#7042f861] bg-[#0300145e] px-[10px] lg:px-[30px] py-[8px] sm:py-[10px] rounded-full text-gray-200 text-[9px] sm:text-xs lg:text-base">
+            <AnimatedLink title="About" href="#about-me" />
+            <AnimatedLink title="Skills" href="#skills" />
+            <AnimatedLink title="Experience" href="#work-experiences" className="text-center" />
+            <AnimatedLink title="Projects" href="#projects" />
           </div>
         </div>
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-2 sm:gap-5">
           {Socials.map((social) => (
-            <Image
-              src={social.src}
-              alt={social.name}
+            <a
+              href={social.href}
               key={social.name}
-              width={24}
-              height={24}
-            />
+              aria-label={social.name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-200 hover:text-white hover:drop-shadow-[0_0_8px_rgba(112,66,248,0.8)] transition"
+            >
+              <social.icon className="fill-current w-[18px] h-[18px] sm:w-[24px] sm:h-[24px]" />
+            </a>
           ))}
         </div>
       </div>
